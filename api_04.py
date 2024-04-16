@@ -77,24 +77,32 @@ def get_transcription_result_url(url, auto_chapters):
 def save_transcript(episode_id):
     audio_url, thumbnail, podcast_title, episode_title = get_episode_audio_url(episode_id)
     data, error = get_transcription_result_url(audio_url, auto_chapters=True)
+    
     if data:
-        filename = f"{episode_id}.txt"
-        with open(filename, 'w') as f:
-            f.write(data['text'])
-
-        filename = f"{episode_id}_chapters.json"
-        with open(filename, 'w') as f:
-            chapters = data['chapters']
-            data_to_save = {
-                'chapters': chapters,
-                'audio_url': audio_url,
-                'thumbnail': thumbnail,
-                'podcast_title': podcast_title,
-                'episode_title': episode_title
-            }
-            json.dump(data_to_save, f, indent=4)
-            print('Transcript saved')
+        try:
+            filename_text = f"{episode_id}.txt"
+            with open(filename_text, 'w') as f:
+                f.write(data['text'])
+                print('Text transcript saved to:', filename_text)
+            
+            filename_json = f"{episode_id}_chapters.json"
+            with open(filename_json, 'w') as f:
+                chapters = data['chapters']
+                data_to_save = {
+                    'chapters': chapters,
+                    'audio_url': audio_url,
+                    'thumbnail': thumbnail,
+                    'podcast_title': podcast_title,
+                    'episode_title': episode_title
+                }
+                json.dump(data_to_save, f, indent=4)
+                print('JSON transcript saved to:', filename_json)
+            
             return True
+        except Exception as e:
+            print("Error occurred while saving transcript:", str(e))
+            return False
+    
     elif error:
         print("Error:", error)
         return False
