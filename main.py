@@ -28,8 +28,8 @@ if button:
 try:
     with open(filename, 'r') as f:
         # Read the contents of the file or perform other operations
-except FileNotFoundError:
-    print(f"Error: File '{filename}' not found.")
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
 
 
 
