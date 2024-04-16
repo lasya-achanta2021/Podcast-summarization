@@ -24,10 +24,14 @@ def get_clean_time(start_ms):
 
 
 if button:
-    filename = episode_id + '_chapters.json'
-    print(filename)
+    filename = f"{episode_id}.txt"
+try:
     with open(filename, 'r') as f:
-        data = json.load(f)
+        # Read the contents of the file or perform other operations
+except FileNotFoundError:
+    print(f"Error: File '{filename}' not found.")
+
+
 
     chapters = data['chapters']
     episode_title = data['episode_title']
