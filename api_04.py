@@ -22,16 +22,23 @@ def fetch_data_from_api(episode_id):
 
 def get_episode_audio_url(episode_id):
     data = fetch_data_from_api(episode_id)
+    
+    if data is None:
+        print("Error: Unable to fetch data from API")
+        return None, None, None, None
+    
     if 'podcast' in data:
         podcast_title = data['podcast'].get('episode_title', 'Unknown Episode Title')
         episode_title = data.get('title', 'Unknown Title')
     else:
         podcast_title = "Unknown Episode Title"
         episode_title = "Unknown Title"
+    
     audio_url = data.get('audio_url', '')
     thumbnail = data.get('thumbnail', '')
     
     return audio_url, thumbnail, podcast_title, episode_title
+
 
 def transcribe(audio_url, auto_chapters):
     transcript_request = {
