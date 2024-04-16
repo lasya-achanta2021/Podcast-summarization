@@ -57,12 +57,12 @@ def get_transcription_result_url(url, auto_chapters):
     if transcribe_id:
         while True:
             data = poll(transcribe_id)
-            if data['status'] == 'completed':
+            if data.get('status') == 'completed':
                 return data, None
-            elif data['status'] == 'error':
+            elif data.get('status') == 'error':
                 return data, data['error']
 
-            print("waiting for 60 seconds")
+            print("Waiting for 60 seconds")
             time.sleep(60)
     else:
         return None, "Transcription failed"
