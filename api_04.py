@@ -6,15 +6,11 @@ import pprint
 
 
 transcript_endpoint = 'https://api.assemblyai.com/v2/transcript'
-assemblyai_headers = {
-    "authorization": API_KEY_ASSEMBLYAI,
-    "content-type": "application/json"
-}
+assemblyai_headers = {"authorization": API_KEY_ASSEMBLYAI}
+
 
 listennotes_episode_endpoint = 'https://listen-api.listennotes.com/api/v2/episodes'
-headers_listennotes = {
-    'X-ListenAPI-Key': API_KEY_LISTENNOTES,
-}
+headers_listennotes = {'X-ListenAPI-Key': API_KEY_LISTENNOTES,}
 
 
 def get_episode_audio_url(episode_id):
