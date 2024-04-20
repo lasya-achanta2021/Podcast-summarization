@@ -9,8 +9,8 @@ transcript_endpoint = 'https://api.assemblyai.com/v2/transcript'
 listennotes_episode_endpoint = 'https://listen-api.listennotes.com/api/v2/episodes'
 
 headers_assemblyai = {
-    "authorization": API_KEY_ASSEMBLYAI,
-    "content-type": "application/json"
+    'Authorization': f'API_KEY {API_KEY_ASSEMBLYAI}',
+    'Content-Type': 'application/json'
 }
 
 headers_listennotes = {
@@ -50,9 +50,9 @@ def transcribe(audio_url, auto_chapters):
         'audio_url': audio_url,
         'auto_chapters': auto_chapters
     }
-
     transcript_response = requests.post(transcript_endpoint, json=transcript_request, headers=headers_assemblyai)
-    if transcript_response.status_code == 201:
+
+    if transcript_response.status_code == 201 or transcript_response.status_code == 200: 
         transcript_id = transcript_response.json()['id']
         return transcript_id
     else:
@@ -73,22 +73,20 @@ def get_transcription_result_url(url, auto_chapters):
                 return data, None
             elif data.get('status') == 'error':
                 return data, data['error']
-
-            st.info("Waiting for 60 seconds")
-            time.sleep(60)
+            msgs("Wait I'm working on it!!", type = 2)
     else:
         return None, "Transcription failed"
 
 def save_transcript(episode_id):
     audio_url, thumbnail, podcast_title, episode_title = get_episode_audio_url(episode_id)
-    data, error = get_transcription_result_url(audio_url, auto_chapters=True)
     
+    data, error = get_transcription_result_url(audio_url, auto_chapters=True)
     if data:
         try:
             filename_text = f"{episode_id}.txt"
             with open(filename_text, 'w') as f:
                 f.write(data['text'])
-                st.success('Text transcript saved to:', filename_text)
+                msgs(f"Text transcript saved to:{filename_text}", type = 1)
             
             filename_json = f"{episode_id}_chapters.json"
             with open(filename_json, 'w') as f:
@@ -101,17 +99,20 @@ def save_transcript(episode_id):
                     'episode_title': episode_title
                 }
                 json.dump(data_to_save, f, indent=4)
-                st.success('JSON transcript saved to:', filename_json)
-            
+                msgs(f"JSON transcript saved to:{filename_json}", type = 1)
             return True
         except Exception as e:
-            st.error("Error occurred while saving transcript:", str(e))
+            msgs(f"Error occurred while saving transcript:{str(e)}")
             return False
     
     elif error:
         st.error("Error:", error)
         return False
-
+def msgs(msg, type = 0):
+    sp = st.empty()
+    sp.success(f"{msg}") if type == 1 else sp.info(f"{msg}") if type == 2 else sp.error(f"{msg}")
+    time.sleep(60) if type == 2 else time.sleep(5) 
+    sp.empty()
 if __name__ == "__main__":
     st.title("Episode Transcription")
 
