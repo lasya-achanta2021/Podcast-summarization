@@ -1,7 +1,7 @@
 import streamlit as st
 import glob
 import json
-from api_04 import save_transcript
+from api_04 import save_transcript, msgs
 
 st.title("Podcast Summaries")
 
@@ -9,6 +9,7 @@ json_files = glob.glob('*.json')
 
 episode_id = st.sidebar.text_input("Episode ID")
 button = st.sidebar.button("Download Episode summary")
+
 
 
 def get_clean_time(start_ms):
@@ -27,9 +28,9 @@ if button:
     if not success:
         st.error("Error: Failed to save transcript. Please check the episode ID and try again.")
     else:
-        st.success("Transcript saved successfully.")
+        msgs("Transcript saved successfully.", type = 1)
 
-    filename = f"{episode_id}.json"  # Assume the transcript is saved as JSON
+    filename = f"{episode_id}_chapters.json"  # Assume the transcript is saved as JSON
     try:
         with open(filename, 'r') as f:
             data = json.load(f)
