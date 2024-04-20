@@ -5,14 +5,9 @@ import pprint
 from api_secrets import API_KEY_ASSEMBLYAI, API_KEY_LISTENNOTES
 
 transcript_endpoint = 'https://api.assemblyai.com/v2/transcript'
-headers_assemblyai = {
-    "authorization": API_KEY_ASSEMBLYAI,
-    "content-type": "application/json"
-}
+headers_assemblyai = {"authorization": API_KEY_ASSEMBLYAI, "content-type": "application/json"}
 listennotes_episode_endpoint = 'https://listen-api.listennotes.com/api/v2/episodes'
-headers_listennotes = {
-    'X-ListenAPI-Key': API_KEY_LISTENNOTES,
-}
+headers_listennotes = { 'X-ListenAPI-Key': API_KEY_LISTENNOTES,}
 
 
 def fetch_data_from_api(episode_id):
